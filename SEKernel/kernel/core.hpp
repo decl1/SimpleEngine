@@ -12,7 +12,8 @@
 typedef enum {
     CORE_OK = 0,
     CORE_ERROR,
-    CORE_UNKNOWN_COMMAND
+    CORE_UNKNOWN_COMMAND,
+    CORE_EXIT
 } core_errors_en;
 // | STATUS ENUM
 
@@ -31,25 +32,29 @@ typedef enum {
 // brief\ core class
 class core_cl {
 private:
-    core_interface_cl interface;
 public:
-    core_cl() {
-        interface = core_interface_cl();
-    };
-
+    core_cl() {};
     ~core_cl() = default;
+
+    int run_help_f(void);
+    int initial_exit_f(void);
 };
 
 // class\ core_interface_cl
 // brief\ core interface class
 class core_interface_cl {
+private:
+    core_cl* core;
 public:
-    core_interface_cl() {};
+    core_interface_cl(core_cl* core_p) {
+        core = core_p;
+    };
     ~core_interface_cl() = default;
 
     // function\ readline_f
     // brief\ cmd parcer
     // retrival\ function status
-    int read_line_f(const std::string commandline, unsigned int& com_id);
+    int read_line_f(const std::string commandline, unsigned int* com_id);
+    int run_command_f(unsigned int com_id);
 };
 #endif  // LIB_SE_CORE_H_
